@@ -1,11 +1,9 @@
 var express = require('express');
-var http = require('http');
+var https = require('http');
 
 // MongoDB connection
-var http = require('http');
-var db = require('./db/db');
 var app = express();
-var server = http.createServer(app);
+var server = https.createServer(app);
 var io = require('socket.io').listen(server);
 var port = (process.env.PORT || 8000);
 server.listen(port);
@@ -62,16 +60,16 @@ io.on('connection', function (socket) {
 
     User.findOne({username: userObj.username})
       .then(function(result) {
-        var notFind = true; 
+        var notFind = true;
         for (var i = 0; i < result.scores.length; i++) {
           if (result.scores[i].title === userObj.title) {
-            result.scores[i].score = Math.max(userObj.score, result.scores[i].score);     
-            notFind = false;      
+            result.scores[i].score = Math.max(userObj.score, result.scores[i].score);
+            notFind = false;
           }
         }
         if (notFind) {
           result.scores.push({
-            title: userObj.title, 
+            title: userObj.title,
             score: userObj.score
           });
         }

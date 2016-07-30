@@ -12,7 +12,7 @@ export default class App extends React.Component {
       score: 100,
       userInput: false,
       playSong: false,
-      socket: io('https://legacypitch.herokuapp.com/')
+      socket: io()
     };
   }
   componentDidMount() {

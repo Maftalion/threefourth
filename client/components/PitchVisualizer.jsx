@@ -9,15 +9,14 @@ export default class PitchVisualizer extends React.Component {
       perfect:0,
       playing: false
     }
-    this.score = 0; 
+    this.score = 0;
     this.newPerfect = 0;
     this.max = 0;
-    this.percentage;  
+    this.percentage;
   }
 
   componentDidMount() {
-    var socket = io('http://localhost:8000');
-    socket.on('playerNote', function(data) {
+    this.props.socket.on('playerNote', function(data) {
       var player = 'player2';
       this.createNotes(data.data, data.songData, player);
     }.bind(this));
@@ -241,11 +240,11 @@ export default class PitchVisualizer extends React.Component {
       if ( difference < 30 ) {
         this.score += 3;
       } else  if (difference < 50) {
-        this.score += 2;  
+        this.score += 2;
       } else if (difference < 70) {
-        this.score ++; 
+        this.score ++;
       }
-      this.percentage = Math.floor(this.score / this.max * 100); 
+      this.percentage = Math.floor(this.score / this.max * 100);
     }
   }
 
@@ -264,12 +263,11 @@ export default class PitchVisualizer extends React.Component {
     updatePitchID = setInterval(function() {
       updatePitch();
     }, 10000 / 60);
-    
-    // Control interval of both note and wave 
+
+    // Control interval of both note and wave
     drawUserGraphID = setInterval(function() {
-      var socket = io('http://localhost:8000');
       getAvgNote( noteArray );
-      socket.emit('playerData', {data: avgNoteArray, songData:this.props.selectedData});
+      this.props.socket.emit('playerData', {data: avgNoteArray, songData:this.props.selectedData});
       drawUserGraph( avgNoteArray, this.props.selectedData );
       this.updateScoreBoard(avgNoteArray, this.props.selectedData);
     }.bind(this), 2000);
@@ -300,7 +298,7 @@ export default class PitchVisualizer extends React.Component {
             </div>
           </div>
           <div className='col s12 l4 audioPlayer'>
-            <a className="btn-floating btn-large waves-effect waves-light teal" 
+            <a className="btn-floating btn-large waves-effect waves-light teal"
                 onClick= {() => {this.props.onPlay(); this.toggleLiveInput()}}>
               <i className="material-icons">play_arrow</i>
             </a>

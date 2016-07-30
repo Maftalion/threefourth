@@ -1,9 +1,9 @@
 var express = require('express');
-var https = require('http');
+var http = require('http');
 
 // MongoDB connection
 var app = express();
-var server = https.createServer(app);
+var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var port = (process.env.PORT || 8000);
 server.listen(port);
